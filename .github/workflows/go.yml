@@ -1,7 +1,4 @@
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
-
-name: Go-CI
+name: Go
 
 on:
   push:
@@ -12,11 +9,11 @@ on:
 jobs:
 
   test:
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         go_version: ['1.18', '1.17', '>=1.18']
-        os: ['ubuntu-lastest', 'ubuntu-18.04']
-    runs-on: ${{ matrix.os }}
+        os: ['ubuntu-latest', 'ubuntu-18.04']
     steps:
     - uses: actions/checkout@v3
 
@@ -25,23 +22,23 @@ jobs:
       with:
         go-version: ${{ matrix.go_version }}
       
-    - name: build-database
+    - name: Build-DB
       run: docker-compose build
       
-    - name: create-database
+    - name: Create-DB
       run: docker-compose up -d
 
     - name: Test
-      run: go test -v main_test.go
+      run: go test -v main_test.go 
       
+  
   build:
     needs: test
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: ['ubuntu-lastest', 'ubuntu-18.04']
+        os: ['ubuntu-latest', 'ubuntu-18.04']
     steps:
     - uses: actions/checkout@v3
-    
     - name: Build
       run: go build -v main.go
