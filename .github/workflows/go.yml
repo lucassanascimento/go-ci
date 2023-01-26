@@ -50,5 +50,6 @@ jobs:
       run: go build -v main.go
 
   docker:
-  needs: build
-  uses: ./.github/workflows/Docker.yml
+    needs: build
+    uses: ./.github/workflows/Docker.yml
+    secrets: inherit
